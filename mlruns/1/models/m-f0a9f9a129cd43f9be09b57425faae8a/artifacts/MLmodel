@@ -1,0 +1,22 @@
+artifact_path: /Users/aajinkyaingalkar/Machine Learning_Project/Customer_Churn/mlruns/1/models/m-f0a9f9a129cd43f9be09b57425faae8a/artifacts
+flavors:
+  python_function:
+    data: model.json
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.xgboost
+    python_version: 3.14.5
+  xgboost:
+    code: null
+    data: model.json
+    model_class: xgboost.core.Booster
+    model_format: json
+    xgb_version: 2.0.3
+mlflow_version: 3.17.1
+model_id: m-f0a9f9a129cd43f9be09b57425faae8a
+model_size_bytes: 2126302
+model_uuid: m-f0a9f9a129cd43f9be09b57425faae8a
+prompts: null
+run_id: 44434d8131e34d2e8ae6f8ff322c2c41
+utc_time_created: '2026-10-30 17:36:49.030192'

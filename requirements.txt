@@ -6,3 +6,5 @@ imblearn
 xgboost
 optuna
 great_expectations
+mlflow==3.17.1
+xgboost==2.0.3

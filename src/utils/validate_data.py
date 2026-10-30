@@ -1,3 +1,4 @@
+import pandas as pd
 import great_expectations as ge
 from great_expectations.dataset import PandasDataset
 from typing import Tuple, List
@@ -14,8 +15,27 @@ def validate_telco_data(df) -> Tuple[bool, List[str]]:
     """
     print("🔍 Starting data validation with Great Expectations...")
     
+    # Normalize numeric text in a validation copy. The Telco CSV stores
+    # TotalCharges as text and represents new customers' empty charges as blanks.
+    validation_df = df.copy()
+    if "TotalCharges" in validation_df.columns:
+        raw_total_charges = validation_df["TotalCharges"].astype("string").str.strip()
+        numeric_total_charges = pd.to_numeric(
+            raw_total_charges, errors="coerce"
+        ).astype(float)
+        invalid_total_charges = (
+            raw_total_charges.notna()
+            & raw_total_charges.ne("")
+            & numeric_total_charges.isna()
+        )
+        if invalid_total_charges.any():
+            count = int(invalid_total_charges.sum())
+            print(f"❌ Data validation FAILED: {count} non-numeric TotalCharges value(s)")
+            return False, ["TotalCharges contains non-numeric values"]
+        validation_df["TotalCharges"] = numeric_total_charges
+
     # Convert pandas DataFrame to Great Expectations Dataset
-    ge_df = PandasDataset(df)
+    ge_df = PandasDataset(validation_df)
     
     # === SCHEMA VALIDATION - ESSENTIAL COLUMNS ===
     print("   📋 Validating schema and required columns...")
